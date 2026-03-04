@@ -10,6 +10,7 @@
  */
 
 import { Channel } from "./channel";
+import { channel } from "./channel-api";
 
 export interface Channels<M> {
   readonly start?: Channel<M>;
@@ -37,11 +38,11 @@ export class TracingChannel<M> {
   constructor(nameOrChannels: string | Channels<M>) {
     if (typeof nameOrChannels === 'string') {
       // Create 5 separate channels with tracing: prefix
-      this.start = new Channel(`tracing:${nameOrChannels}:start`);
-      this.end = new Channel(`tracing:${nameOrChannels}:end`);
-      this.asyncStart = new Channel(`tracing:${nameOrChannels}:asyncStart`);
-      this.asyncEnd = new Channel(`tracing:${nameOrChannels}:asyncEnd`);
-      this.error = new Channel(`tracing:${nameOrChannels}:error`);
+      this.start = channel<M>(`tracing:${nameOrChannels}:start`);
+      this.end = channel<M>(`tracing:${nameOrChannels}:end`);
+      this.asyncStart = channel<M>(`tracing:${nameOrChannels}:asyncStart`);
+      this.asyncEnd = channel<M>(`tracing:${nameOrChannels}:asyncEnd`);
+      this.error = channel<M>(`tracing:${nameOrChannels}:error`);
     } else {
       this.start = nameOrChannels.start
       this.end = nameOrChannels.end
