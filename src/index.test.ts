@@ -223,6 +223,28 @@ describe("diagnostics_channel module", () => {
       expect(tc.error).toBe(errorCh);
       expect(tc.start).toBeUndefined();
     });
+
+    it("should return new wrappers with shared named channels", () => {
+      const first = tracingChannel("trace-shared");
+      const second = tracingChannel("trace-shared");
+
+      expect(first).not.toBe(second);
+      expect(first.start).toBe(second.start);
+      expect(first.end).toBe(second.end);
+      expect(first.asyncStart).toBe(second.asyncStart);
+      expect(first.asyncEnd).toBe(second.asyncEnd);
+      expect(first.error).toBe(second.error);
+    });
+
+    it("should use channel() for named tracing subchannels", () => {
+      const tc = tracingChannel("trace-via-channel");
+
+      expect(tc.start).toBe(channel("tracing:trace-via-channel:start"));
+      expect(tc.end).toBe(channel("tracing:trace-via-channel:end"));
+      expect(tc.asyncStart).toBe(channel("tracing:trace-via-channel:asyncStart"));
+      expect(tc.asyncEnd).toBe(channel("tracing:trace-via-channel:asyncEnd"));
+      expect(tc.error).toBe(channel("tracing:trace-via-channel:error"));
+    });
   });
 
   describe("integration tests", () => {

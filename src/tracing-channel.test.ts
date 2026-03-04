@@ -1,8 +1,13 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { resetChannelRegistryForTest } from "./channel-registry";
 import { TracingChannel } from "./tracing-channel";
 import { Channel } from "./channel";
 
 describe("TracingChannel", () => {
+  beforeEach(() => {
+    resetChannelRegistryForTest();
+  });
+
   describe("channel creation", () => {
     it("should create 5 separate channels from string name", () => {
       const tc = new TracingChannel("test");
@@ -12,6 +17,18 @@ describe("TracingChannel", () => {
       expect(tc.asyncStart?.name).toBe("tracing:test:asyncStart");
       expect(tc.asyncEnd?.name).toBe("tracing:test:asyncEnd");
       expect(tc.error?.name).toBe("tracing:test:error");
+    });
+
+    it("should create new wrappers that share named channels", () => {
+      const first = new TracingChannel("shared");
+      const second = new TracingChannel("shared");
+
+      expect(first).not.toBe(second);
+      expect(first.start).toBe(second.start);
+      expect(first.end).toBe(second.end);
+      expect(first.asyncStart).toBe(second.asyncStart);
+      expect(first.asyncEnd).toBe(second.asyncEnd);
+      expect(first.error).toBe(second.error);
     });
 
     it("should create from Channels object with all channels", () => {
