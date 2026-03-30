@@ -44,3 +44,17 @@ export { channel, hasSubscribers } from "./channel-api";
 // Re-export classes
 export { Channel, type TransformFunction, type MessageFunction } from "./channel";
 export { TracingChannel, type ChannelHandlers } from "./tracing-channel";
+
+// Default export mirrors Node.js CJS interop behaviour: when node:diagnostics_channel
+// (a CJS module) is imported as ESM with `import dc from 'node:diagnostics_channel'`,
+// Node.js exposes module.exports as the default.  Providing the same default export
+// here lets code authored for that pattern work with dc-browser without changes.
+export default {
+  channel,
+  hasSubscribers,
+  subscribe,
+  unsubscribe,
+  tracingChannel,
+  Channel,
+  TracingChannel,
+};
