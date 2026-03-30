@@ -1,6 +1,6 @@
 {
   "name": "dc-browser",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Browser polyfill for Node.js diagnostics_channel",
   "author": "Stephen Belanger <admin@stephenbelanger.com>",
   "license": "MIT",
